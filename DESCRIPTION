@@ -1,0 +1,9 @@
+Package: seapacific
+Type: Package
+Title: Data from SEA Semester Cruises Across the South Pacific
+Version: 0.1.0
+Authors@R: person("Ben", "Harden", email = "bharden@sea.edu", role = c("aut", "cre"))
+Description: Packaged data from the SEA Semester Archive that includes the combined (and currently un-QCd) data from cruise S258, S265, S272 and S278.
+License: Free
+Encoding: UTF-8
+LazyData: true
