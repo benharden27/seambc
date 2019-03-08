@@ -3,9 +3,21 @@ subfolders <- list.files(master_folder, pattern = "S[0-9]{3}")
 
 for (i in 1:length(subfolders)) {
 
+  # set route folder
   root_folder <- file.path(master_folder,subfolders[i])
 
+  # Package all data by standard routine
   a <- sea::package_data(root_folder)
+
+  # Add in the size fraction chl-a from S278
+  if (i == 4) {
+    surf <- sea::read_datasheet(file.path(root_folder,"SHIPDATA/S278_surfsamp.xlsm"))
+    a$surfsamp <- dplyr::mutate(a$surfsamp,
+                         chla_45 = as.numeric(surf$`Chl.a........0.45um....(ug/l)`),
+                         chla_120 = as.numeric(surf$`Chl.a...1.2um...(ug/l)`),
+                         chla_800 = as.numeric(surf$`Chl.a...8.0um...(ug/l)`))
+  }
+
 
   for (j in 1:length(a$ctd)) {
     # find possible oxygen values
