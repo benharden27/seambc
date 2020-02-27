@@ -63,9 +63,9 @@ for (i in 1:length(subfolders)) {
 
 }
 
-devtools::use_data(S258, overwrite = TRUE)
-devtools::use_data(S265, overwrite = TRUE)
-devtools::use_data(S272, overwrite = TRUE)
-devtools::use_data(S278, overwrite = TRUE)
-
+usethis::use_data(S258, overwrite = TRUE)
+usethis::use_data(S265, overwrite = TRUE)
+usethis::use_data(S272, overwrite = TRUE)
+usethis::use_data(S278, overwrite = TRUE)
+usethis::use_data(S285, overwrite = TRUE)
 
