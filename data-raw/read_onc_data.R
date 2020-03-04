@@ -37,6 +37,16 @@ for (i in 1:length(subfolders)) {
 
     station <- paste0(subfolders[i],"_",stringr::str_pad(a$ctd[[j]]@metadata$station,3,pad = "0"))
 
+    distance_to_adcp <- oce::geodDist(a$adcp$lon,a$adcp$lat,
+                                      a$ctd[[j]]@metadata$longitude,a$ctd[[j]]@metadata$latitude)
+    ii <- which.min(distance_to_adcp)
+    if(distance_to_adcp[ii] < 50) {
+      uadd <- approx(a$adcp$d,a$adcp$u[ii,],a$ctd[[j]]@data$depth)$y
+      vadd <- approx(a$adcp$d,a$adcp$v[ii,],a$ctd[[j]]@data$depth)$y
+    } else {
+      uadd <- vadd <- NA
+    }
+
 
     ctd_add <- tibble::tibble(dep = a$ctd[[j]]@data$depth,
                       temp = a$ctd[[j]]@data$temperature,
@@ -48,6 +58,8 @@ for (i in 1:length(subfolders)) {
                       oxygen = a$ctd[[j]]@data[[oval]],
                       lon = a$ctd[[j]]@metadata$longitude,
                       lat = a$ctd[[j]]@metadata$latitude,
+                      u = uadd,
+                      v = vadd,
                       station = station,
                       cruise = subfolders[i])
     if (j == 1){
