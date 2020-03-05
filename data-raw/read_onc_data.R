@@ -41,8 +41,17 @@ for (i in 1:length(subfolders)) {
                                       a$ctd[[j]]@metadata$longitude,a$ctd[[j]]@metadata$latitude)
     ii <- which.min(distance_to_adcp)
     if(distance_to_adcp[ii] < 50) {
-      uadd <- approx(a$adcp$d,a$adcp$u[ii,],a$ctd[[j]]@data$depth)$y
-      vadd <- approx(a$adcp$d,a$adcp$v[ii,],a$ctd[[j]]@data$depth)$y
+      step = 10
+      if(i == 5){
+        step = step * 4
+      }
+      umean <- colMeans(a$adcp$u[ii-step:ii+step,],na.rm = T)
+      vmean <- colMeans(a$adcp$v[ii-step:ii+step,],na.rm = T)
+      n <- colMeans(is.na(a$adcp$u[ii-step:ii+step,]))
+      umean[n>0.2] <- NA
+      vmean[n>0.2] <- NA
+      uadd <- approx(a$adcp$d,umean,a$ctd[[j]]@data$depth)$y
+      vadd <- approx(a$adcp$d,vmean,a$ctd[[j]]@data$depth)$y
     } else {
       uadd <- vadd <- NA
     }
