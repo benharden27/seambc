@@ -19,6 +19,8 @@ for (i in 1:length(subfolders)) {
   }
 
 
+  # a$adcp$u <- ifelse(a$adcp$u>1,NA,a$adcp$u)
+  # a$adcp$v <- ifelse(a$adcp$v>1,NA,a$adcp$v)
   for (j in 1:length(a$ctd)) {
     # find possible oxygen values
     ii <- stringr::str_which(names(a$ctd[[j]]@data),"oxygen")
@@ -41,15 +43,16 @@ for (i in 1:length(subfolders)) {
                                       a$ctd[[j]]@metadata$longitude,a$ctd[[j]]@metadata$latitude)
     ii <- which.min(distance_to_adcp)
     if(distance_to_adcp[ii] < 50) {
-      step = 10
+      step = 6 # 3 == 1 hour, 6 == 2 hours (4 hour window total)
       if(i == 5){
         step = step * 4
       }
-      umean <- colMeans(a$adcp$u[ii-step:ii+step,],na.rm = T)
-      vmean <- colMeans(a$adcp$v[ii-step:ii+step,],na.rm = T)
-      n <- colMeans(is.na(a$adcp$u[ii-step:ii+step,]))
-      umean[n>0.2] <- NA
-      vmean[n>0.2] <- NA
+
+      umean <- colMeans(a$adcp$u[(ii-step):(ii+step),],na.rm = T)
+      vmean <- colMeans(a$adcp$v[(ii-step):(ii+step),],na.rm = T)
+      n <- colMeans(is.na(a$adcp$u[(ii-step):(ii+step),]))
+      umean[n>0.6] <- NA
+      vmean[n>0.6] <- NA
       uadd <- approx(a$adcp$d,umean,a$ctd[[j]]@data$depth)$y
       vadd <- approx(a$adcp$d,vmean,a$ctd[[j]]@data$depth)$y
     } else {
