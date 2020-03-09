@@ -45,7 +45,7 @@ for (i in 1:length(subfolders)) {
     if(distance_to_adcp[ii] < 50) {
       step = 6 # 3 == 1 hour, 6 == 2 hours (4 hour window total)
       if(i == 5){
-        step = step * 4
+        step = step * 4 # account for S285 data being STA (5min) rather than LTA (20min)
       }
 
       umean <- colMeans(a$adcp$u[(ii-step):(ii+step),],na.rm = T)
@@ -55,6 +55,14 @@ for (i in 1:length(subfolders)) {
       vmean[n>0.6] <- NA
       uadd <- approx(a$adcp$d,umean,a$ctd[[j]]@data$depth)$y
       vadd <- approx(a$adcp$d,vmean,a$ctd[[j]]@data$depth)$y
+      # testing script
+      # plot(umean, type = 'l', col = "red", lwd = 5,ylim = c(-1,1))
+      # for (l in -step:step)
+      #   points(a$adcp$u[ii+l,])
+      # lines(umean, col = "red", lwd = 5)
+      #
+      # plot(a$adcp$u[(ii-step):(ii+step),1])
+
     } else {
       uadd <- vadd <- NA
     }
