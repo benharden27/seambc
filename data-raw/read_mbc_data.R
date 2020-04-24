@@ -1,7 +1,7 @@
 master_folder <- "~/data/SEA/MBC"
 subfolders <- list.files(master_folder, pattern = "(S|C)[0-9]{3}")
 
-for (i in length(subfolders)) {
+for (i in 1:length(subfolders)) {
 
   # set route folder
   root_folder <- file.path(master_folder,subfolders[i])
